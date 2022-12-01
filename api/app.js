@@ -3,6 +3,7 @@
 // load modules
 const express = require('express');
 const morgan = require('morgan');
+const cors = require('cors');
 
 // variable to enable global error logging
 const enableGlobalErrorLogging = process.env.ENABLE_GLOBAL_ERROR_LOGGING === 'true';
@@ -10,6 +11,9 @@ const enableGlobalErrorLogging = process.env.ENABLE_GLOBAL_ERROR_LOGGING === 'tr
 // create the Express app
 const app = express();
 app.use(express.json()); // for parsing application/json
+
+// Enable Use of CORS Requests
+app.use(cors());
 
 //importing the User and Course Routes
 const userRoutes = require('./routes/users'); 
