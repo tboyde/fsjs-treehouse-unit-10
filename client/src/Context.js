@@ -7,11 +7,7 @@ const Context = React.createContext();
 
 export class Provider extends Component {
 
-  state = {
-    authenticatedUser: Cookies.getJSON('authenticatedUser') || null 
-
-  }; 
-
+  //Stores and handles data class, cookies, and state of provider
   constructor() {
     super();
     this.data = new Data(); 
@@ -62,10 +58,12 @@ export const Consumer = Context.Consumer;
  * @returns {function} A higher-order component.
  */
 
-export function withContext(Component) {
+export function withContext(Component){
   return function ContextComponent(props) {
     return (
-      <Context.Consumer> {context => <Component {...props} context={context} />} </Context.Consumer>
+      <Context.Consumer> 
+      {(context) => <Component {...props} context={context} />} 
+      </Context.Consumer>
     );
   }
 }

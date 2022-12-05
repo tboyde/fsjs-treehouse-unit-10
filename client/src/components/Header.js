@@ -1,8 +1,9 @@
 import React from "react";
 import { NavLink } from 'react-router-dom'; 
 
-const Header = ({ context }) => {   
+const Header = ({context} ) => {   
     const authUser = context.authenticatedUser; 
+
     return(
         <>
         <header>

@@ -59,15 +59,22 @@ const UserSignIn = ({ context }) => {
                 name='emailAddress'
                 type='email'
                 placeholder='example@website.com'
+                ref={emailAddress}
               />
               <label htmlFor='password'>Password</label>
-              <input id='password' name='password' type='password' defaultValue='' />
+              <input 
+              id='password' 
+              name='password' 
+              type='password' 
+              defaultValue='' 
+              ref={password}
+              />
               <button className='button' type='submit'>
                 Sign In
               </button>
               <button
                 className='button button-secondary'
-                onclick={cancelHandler}
+                onClick={cancelHandler}
               >
                 Cancel
               </button>

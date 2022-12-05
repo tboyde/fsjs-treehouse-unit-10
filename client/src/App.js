@@ -1,39 +1,39 @@
+/* eslint-disable array-callback-return */
+import React from 'react';
 import { Routes, Route } from 'react-router-dom';
+import {routes} from './routes'; 
+import { withContext }   from './Context';
 
  //this component (DataFetching) was only imported to test the connection between the REST API & the frontend
-import DataFetching from './components/DataFetching';
+// import DataFetching from './components/DataFetching';
 
 //imported components 
-// import Header from './components/Header';
-// import UpdateCourse from './components/UpdateCourse';
-// import CourseDetail from './components/CourseDetail';
-// import Courses from './components/Courses';
-// import CreateCourse from './components/CreateCourse';
-// import UserSignIn from './components/UserSignIn';
-// import UserSignUp from './components/UserSignUp';
-// import UserSignOut from './components/UserSignOut';
-// import NotFound from './components/NotFound';
-// import Error from './components/Error';
-// import Forbidden from './components/Forbidden';
+import Header from './components/Header';
+import UpdateCourse from './components/UpdateCourse';
+import CreateCourse from './components/CreateCourse';
+import PrivateRoutes from './components/PrivateRoutes';
 
-// import { HeaderWithContext } from './components/AddContext';
-
-
-
+//adding context to components
+const HeaderContext = withContext(Header); 
+const CreateCourseWithContext = withContext(CreateCourse); 
+const UpdateCourseWithContext = withContext(UpdateCourse); 
+const PrivateRoutesWithContext = withContext(PrivateRoutes); 
 
 const App = () => {
   return (
     <>
-    <div className="App">
-    <DataFetching />
-
-    {/* <Routes>
-    {routes.map((route, index) => 
-      <Route exact path={route.path} render={route.component} key={index}/>
-        )}
-    </Routes> */}
-    </div>
+    <HeaderContext />
+    <Routes>
+      {routes.map((route, i) => (
+        <Route path={route.path} element={route.component} key={i} />
+      ))}
+      <Route element={<PrivateRoutesWithContext/>}>
+        <Route path='/courses/create' element={<CreateCourseWithContext/>} />
+        <Route path='/courses/:id/update' element={<UpdateCourseWithContext/>} />
+      </Route>
+    </Routes>
     </>
+    
   );
 }
 
