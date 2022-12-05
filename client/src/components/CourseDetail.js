@@ -7,13 +7,19 @@ const CourseDetail = ({ context }) => {
     const currentUser  = context.authenticatedUser; 
     const redirectTo = useNavigate(); 
     const { id } = useParams(); 
-    const [ course, findCourse ] = useState(); 
+    const [ course, setCourse ] = useState(''); 
 
     useEffect(()=>{
         context.data
             .getCourse(id)
             //Checking to see if course exists. If not, then it redirects user to 404 / NotFound page
-            .then((course) => ( course ? findCourse(course) : redirectTo('/notfound')))
+            .then(course => {
+                if (course){
+                    setCourse(course)
+                } else {
+                    redirectTo('/notfound'); 
+                }
+            })
             .catch((err) => {
                     console.log(`Sorry, there seems to be an error with finding a course with the id of ${id}. `)
                     redirectTo('/error')
@@ -35,7 +41,7 @@ const CourseDetail = ({ context }) => {
         <div className="actions--bar">
             <div className="wrap">
             { currentUser !== null && 
-                currentUser.emailAddress === course.courseOwner.emailAddress ? (
+                currentUser.id === course.userId ? (
                     <>
                      <Link className='button' to={`/courses/${course.id}/update`}>Update Course</Link> 
                      <Link className='button' to='/' onClick={()=>{courseDelete(id)}}>Delete Course</Link> 
@@ -53,7 +59,7 @@ const CourseDetail = ({ context }) => {
                     <div>
                     <h3 className="course--detail--title">Course</h3>
                     <h4 className="course--name">{course.title}</h4>
-                    <p>{`By: ${course.courseOwner.firstName} ${course.courseOwner.lastName}`}</p>
+                    <p>{`By: ${currentUser.firstName} ${currentUser.lastName}`}</p>
                     <ReactMarkdown>{course.description}</ReactMarkdown>
                     </div>
                     <div>

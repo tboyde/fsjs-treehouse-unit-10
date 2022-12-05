@@ -12,6 +12,7 @@ const UserSignIn = ({ context }) => {
 
   const submitHandler =  (e) => {
     e.preventDefault();
+    
     //retrieves signin credentials from user input 
     const email = emailAddress.current.value; 
     const pass = password.current.value; 

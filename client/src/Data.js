@@ -26,9 +26,9 @@ export default class Data {
 
   //Retrieves all courses (GET)
   async getCourses(){
-    const allCourses = await this.api('/courses', 'GET'); 
-    if (allCourses.status === 200){
-      return allCourses.json().then((data) => data); 
+    const res = await this.api('/courses', 'GET'); 
+    if (res.status === 200){
+      return res.json().then((data) => data); 
     } else {
       throw new Error(); 
     }
@@ -36,10 +36,10 @@ export default class Data {
 
   //Retrieves user (GET)
   async getUser(username, password) {
-    const foundUser = await this.api(`/users`, 'GET', null, true, { username, password } );
-    if (foundUser.status === 200) {
-      return foundUser.json().then((data) => data);
-    } else if (foundUser.status === 401) {
+    const res = await this.api(`/users`, 'GET', null, true, { username, password } );
+    if (res.status === 200) {
+      return res.json().then((data) => data);
+    } else if (res.status === 401) {
       return null;
     } else {
       throw new Error();
@@ -48,11 +48,11 @@ export default class Data {
 
   //Creates a new user (POST)
   async createUser(user) {
-    const newUser = await this.api('/users', 'POST', user);
-    if (newUser.status === 201) {
+    const res = await this.api('/users', 'POST', user);
+    if (res.status === 201) {
       return [];
-    } else if (newUser.status === 400) {
-      return newUser.json().then((data) => {
+    } else if (res.status === 400) {
+      return res.json().then((data) => {
         return data.errors;
       });
     } else {
@@ -62,11 +62,11 @@ export default class Data {
 
   //Creates a new course (POST)
   async createCourse(body, username, password) {
-    const newCourse = await this.api(`/courses`, 'POST', body, true, { username, password });
-    if (newCourse.status === 201) {
+    const res = await this.api(`/courses`, 'POST', body, true, { username, password });
+    if (res.status === 201) {
       return [];
-    } else if (newCourse.status === 400) {
-      return newCourse.json().then((data) => {
+    } else if (res.status === 400) {
+      return res.json().then((data) => {
         return data.errors;
       });
     } else {
@@ -76,9 +76,9 @@ export default class Data {
 
   //Finds courses (GET)
   async getCourse(id) {
-    const course = await this.api(`/courses/${id}`, 'GET');
-    if (course.status === 200) {
-      return course.json().then((data) => data);
+    const res = await this.api(`/courses/${id}`, 'GET');
+    if (res.status === 200) {
+      return res.json().then((data) => data);
     } else {
       throw new Error();
     }
@@ -86,14 +86,14 @@ export default class Data {
 
 //Updates existing course (PUT)
 async updateCourse(id, body, username, password) {
-  const updateCourse = await this.api(`/courses/${id}`, 'PUT', body, true, { username, password });
-  if (updateCourse.status === 204) {
+  const res = await this.api(`/courses/${id}`, 'PUT', body, true, { username, password });
+  if (res.status === 204) {
     return [];
-  } else if (updateCourse.status === 400) {
-    return updateCourse.json().then((data) => {
+  } else if (res.status === 400) {
+    return res.json().then((data) => {
       return data.errors;
     });
-  } else if (updateCourse.status === 404) {
+  } else if (res.status === 404) {
     throw new Error("404");
   } else {
     throw new Error("505");
@@ -102,10 +102,10 @@ async updateCourse(id, body, username, password) {
 
 //Deletes course (DELETE)
 async deleteCourse(id, username, password) {
-  const removeCourse = await this.api(`/courses/${id}`, 'DELETE', null, true, { username, password });
-  if (removeCourse.status === 204) {
+  const res = await this.api(`/courses/${id}`, 'DELETE', null, true, { username, password });
+  if (res.status === 204) {
     return [];
-  } else if (removeCourse.status === 401) {
+  } else if (res.status === 401) {
     return null;
   } else {
     throw new Error();

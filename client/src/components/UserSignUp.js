@@ -17,10 +17,10 @@ const UserSignUp = ({ context }) => {
 
     //creates user object from input from the user 
     const user = {
-      firstName: firstName.current.value, 
-      lastName: lastName.current.value, 
-      emailAddress: emailAddress.current.value, 
-      password: password.current.value
+      "firstName": firstName.current.value, 
+      "lastName": lastName.current.value, 
+      "emailAddress": emailAddress.current.value, 
+      "password": password.current.value, 
     }
 
     context.data
@@ -30,14 +30,8 @@ const UserSignUp = ({ context }) => {
           setErrors(errors); 
         } else {
           context.actions
-          .signIn(user.emailAddress, user.password)
-          .then(user => {
-            if (user){
-              redirectTo('/')
-            } else {
-              setErrors(['Login Unsuccessful. Please Try Again'])
-            }
-          })
+          .signIn(emailAddress.current.value, password.current.value )
+          .then(() => redirectTo('/'))
           .catch(err =>{
             console.log('Sign In Error: ', err); 
             redirectTo('/error'); 
