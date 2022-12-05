@@ -1,11 +1,10 @@
+import { Routes, Route } from 'react-router-dom';
 
-// import { Routes, Route } from 'react-router-dom';
-// import { routes } from './routes'
  //this component (DataFetching) was only imported to test the connection between the REST API & the frontend
-// import DataFetching from './components/DataFetching';
+import DataFetching from './components/DataFetching';
 
 //imported components 
-import Header from './components/Header';
+// import Header from './components/Header';
 // import UpdateCourse from './components/UpdateCourse';
 // import CourseDetail from './components/CourseDetail';
 // import Courses from './components/Courses';
@@ -17,16 +16,21 @@ import Header from './components/Header';
 // import Error from './components/Error';
 // import Forbidden from './components/Forbidden';
 
+// import { HeaderWithContext } from './components/AddContext';
 
 
 
-function App() {
+
+const App = () => {
   return (
     <>
     <div className="App">
-    <Header />
-    {/* <Routes>
+    <DataFetching />
 
+    {/* <Routes>
+    {routes.map((route, index) => 
+      <Route exact path={route.path} render={route.component} key={index}/>
+        )}
     </Routes> */}
     </div>
     </>

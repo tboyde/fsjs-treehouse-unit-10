@@ -1,74 +1,115 @@
-import React, { Component } from 'react';
+import React, { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-class CreateCourse extends Component {
-    
-   constructor(){
-       super();
+const CreateCourse = ({ context }) => {
+    //sets initial value & state for validation erros
+    const [valErrs, setValErrs ] = useState([]); 
+    const currentUser = context.authenticatedUser; 
 
-       this.state={
-       }
-   }
-   render(){
+    //sets references that are required to build the course object 
+    const description = useRef(); 
+    const estimatedTime = useRef(); 
+    const materialsNeeded = useRef(); 
+    const title = useRef(); 
+
+    const redirectTo = useNavigate()
+
+    const submitHandler = async (e) => {
+        //prevents button from automatically submitting
+        e.preventDefault(); 
+        //all of the fields that will be used for the 'body' when creating the course
+        const course = {
+            userId: context.authenticatedUser.id, 
+            title: title.current.value, 
+            description: description.current.value,
+            estimatedTime: estimatedTime.current.value, 
+            materialsNeeded: materialsNeeded.current.value, 
+        }; 
+
+        await context.data
+        .CreateCourse(course, currentUser.emailAddress, currentUser.password)
+        .then((errors) => (errors ? setValErrs(errors) : redirectTo('/')))//if there are no errors, the user will be redirected to courses / index page
+        .catch((err) => {
+            console.log('Error related to course creation', err)
+            redirectTo('/error'); 
+        }); 
+    }; 
+
+    const cancelHandler = (e) => {
+        e.preventDefault(); 
+        redirectTo('/')
+    }
+
        return (
            <>
             <main>
-                <div className="wrap">
+                <div className='wrap'>
                     <h2>Create Course</h2>
-                    <div className="validation--errors">
-                    <h3>Validation Errors</h3>
-                    <ul>
-                        <li>Please provide a value for "Title"</li>
-                        <li>Please provide a value for "Description"</li>
-                    </ul>
-                    </div>
-                    <form>
-                    <div className="main--flex">
-                        <div>
-                        <label htmlFor="courseTitle">Course Title</label>
-                        <input
-                            id="courseTitle"
-                            name="courseTitle"
-                            type="text"
-                            defaultValue=""
-                        />
-                        <p>By Joe Smith</p>
-                        <label htmlFor="courseDescription">Course Description</label>
-                        <textarea
-                            id="courseDescription"
-                            name="courseDescription"
-                            defaultValue={""}
-                        />
+                    {valErrs && valErrs.length >= 1 ? (
+                        <div className='validation--errors'>
+                            <h3>Validation Errors--*/</h3>
+                            <ul>
+                                {valErrs.map((error, index) =>(
+                                    <li key={index}>{error}</li>
+                                ))}
+                            </ul>
                         </div>
-                        <div>
-                        <label htmlFor="estimatedTime">Estimated Time</label>
-                        <input
-                            id="estimatedTime"
-                            name="estimatedTime"
-                            type="text"
-                            defaultValue=""
-                        />
-                        <label htmlFor="materialsNeeded">Materials Needed</label>
-                        <textarea
-                            id="materialsNeeded"
-                            name="materialsNeeded"
-                            defaultValue={""}
-                        />
+                    ) : null }
+
+                    
+                    <form onSubmit={submitHandler}>
+                        <div className='main--flex'>
+                            <div>
+                            <label htmlFor='courseTitle'>Course Title</label>
+                            <input
+                                id='courseTitle'
+                                name='courseTitle'
+                                type='text'
+                                defaultValue=''
+                                ref={title}
+                            />
+                            <p>{`By: ${currentUser.firstName} ${currentUser.lastName}`}</p>
+                            <label htmlFor='courseDescription'>Course Description</label>
+                            <textarea
+                                id='courseDescription'
+                                name='courseDescription'
+                                defaultValue=''
+                                ref={description}
+
+                            />
+                            </div>
+                            <div>
+                            <label htmlFor='estimatedTime'>Estimated Time</label>
+                            <input
+                                id='estimatedTime'
+                                name='estimatedTime'
+                                type='text'
+                                defaultValue=''
+                                ref={estimatedTime}
+                            />
+                            <label htmlFor='materialsNeeded'>Materials Needed</label>
+                            <textarea
+                                id='materialsNeeded'
+                                name='materialsNeeded'
+                                defaultValue={''}
+                                ref={materialsNeeded}
+                            />
+                            </div>
                         </div>
-                    </div>
-                    <button className="button" type="submit">
-                        Create Course
-                    </button>
-                    <button
-                        className="button button-secondary"
-                        onclick="event.preventDefault(); location.href='index.html';"
-                    >
-                        Cancel
-                    </button>
+                        <button className='button' type='submit'>
+                            Create Course
+                        </button>
+                        <button
+                            className='button button-secondary'
+                            onClick={cancelHandler}
+                        >
+                            Cancel
+                        </button>
                     </form>
                 </div>
             </main>
            </>
        )
    }
-}
+
 export default CreateCourse;

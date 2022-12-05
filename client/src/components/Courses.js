@@ -1,53 +1,34 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
-class Courses extends Component {
-    
-   constructor(){
-       super();
 
-       this.state={
-       }
-   }
-   render(){
+const Courses = ({ context }) => {
+    const [ courses, setCourses ] = useState([]); 
+    const redirectTo = useNavigate(); 
+
+    useEffect(()=>{
+        context.data
+            .getCourses()
+            //Adds retrived courses to courses array with 'setCourses' 
+            .then((courses) => setCourses(courses))
+            .catch((err) => {
+                    console.log('Sorry, theres seems to be some type of error', err)
+                    redirectTo('/error')
+                }); 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
        return (
         <>
-        <header>
-            <div className="wrap header--flex">
-                <h1 className="header--logo">
-                    <a href="index.html">Courses</a>
-                </h1>
-
-                <nav>
-                    <ul className="header--signedout">
-                        <li>
-                            <a href="sign-up.html">Sign Up </a>
-                        </li>
-                        <li>
-                            <a href="sign-in.html">Sign In</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        </header>
-
         <main>
             <div className="wrap main--grid">
-                <a className="course--module course--link" href="course-detail.html">
+            {courses.map(course => (
+                <Link key={course.id} className='course--module course--link' to={`/courses/${course.id}`}>
                     <h2 className="course--label">Course</h2>
-                    <h3 className="course--title">Build a Basic Bookcase</h3>
-                </a>
-                <a className="course--module course--link" href="course-detail.html">
-                    <h2 className="course--label">Course</h2>
-                    <h3 className="course--title">Learn How to Program</h3>
-                </a>
-                <a className="course--module course--link" href="course-detail.html">
-                    <h2 className="course--label">Course</h2>
-                    <h3 className="course--title">Learn How to Test Programs</h3>
-                </a>
-                <a
-                    className="course--module course--add--module"
-                    href="create-course.html"
-                >
+                    <h3 className="course--title">{course.title}</h3>
+                </Link>
+            ))}
+                <Link className="course--module course--add--module" to={`/courses/create`}>
                 <span className="course--add--title">
                 <svg
                     version="1.1"
@@ -57,17 +38,17 @@ class Courses extends Component {
                     viewBox="0 0 13 13"
                     className="add"
                 >
-            <polygon points="7,6 7,0 6,0 6,6 0,6 0,7 6,7 6,13 7,13 7,7 13,7 13,6 " />
-          </svg>
+                    <polygon points="7,6 7,0 6,0 6,6 0,6 0,7 6,7 6,13 7,13 7,7 13,7 13,6 " />
+                </svg>
           New Course
          </span>
-        </a>
+        </Link>
     </div>
   </main>
 </>
 
        )
-   }
-}
+   }; 
+
 export default Courses;
 

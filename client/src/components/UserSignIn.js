@@ -1,65 +1,87 @@
-import React, { Component } from 'react';
+import React, { useRef, useState } from 'react';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 
-class UserSignIn extends Component {
-    
-   constructor(){
-       super();
+const UserSignIn = ({ context }) => {
+  const [ valError, setValErrors ] = useState(); 
 
-       this.state={
-       }
-   }
-   render(){
+  const emailAddress = useRef();
+  const password = useRef(); 
+
+  const redirectTo = useNavigate(); 
+  const location = useLocation(); 
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+
+    //retrieves signin credentials from user input 
+    const email = emailAddress.current.value; 
+    const pass = password.current.value; 
+
+    const lastLocation = location.state?.from || '/' //this value holds the value of the last visited location in the browser or defaults back to the index page 
+
+    if (email && pass){
+    //sign in method checks to see if user is authorized
+    await context.actions
+    .signIn(email, pass)
+    .then(currentUser => (currentUser ? redirectTo(lastLocation) : setValErrors(['Incorrect Email Address or Password. Please Try Again'])))
+    .catch(err => {
+      console.log('Sign In Error: ', err)
+      redirectTo('/error'); 
+    }); 
+    } else {
+      setValErrors(['Email Address and Password is Required']) 
+    }
+  }
+
+  const cancelHandler = (e) => {
+    e.preventDefault(); 
+    redirectTo('/')
+    }
+
        return (
         <>
-        <header>
-          <div className="wrap header--flex">
-            <h1 className="header--logo">
-              <a href="index.html">Courses</a>
-            </h1>
-            <nav>
-              <ul className="header--signedout">
-                <li>
-                  <a href="sign-up.html">Sign Up</a>
-                </li>
-                <li>
-                  <a href="sign-in.html">Sign In</a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </header>
         <main>
-          <div className="form--centered">
+          <div className='form--centered'>
             <h2>Sign In</h2>
-            <form>
-              <label htmlFor="emailAddress">Email Address</label>
+            { valError ? (
+              <div className='validation--errors'>
+                        <h3>Validation Errors</h3>
+                        <ul>
+                            {valError.map((error, index) => <li key={index}>{error}</li>)}
+                        </ul>
+                    </div> 
+                    ) : null 
+                  }
+            <form onSubmit={submitHandler}>
+              <label htmlFor='emailAddress'>Email Address</label>
               <input
-                id="emailAddress"
-                name="emailAddress"
-                type="email"
-                defaultValue=""
+                id='emailAddress'
+                name='emailAddress'
+                type='email'
+                placeholder='example@website.com'
               />
-              <label htmlFor="password">Password</label>
-              <input id="password" name="password" type="password" defaultValue="" />
-              <button className="button" type="submit">
+              <label htmlFor='password'>Password</label>
+              <input id='password' name='password' type='password' defaultValue='' />
+              <button className='button' type='submit'>
                 Sign In
               </button>
               <button
-                className="button button-secondary"
-                onclick="event.preventDefault(); location.href='index.html';"
+                className='button button-secondary'
+                onclick={cancelHandler}
               >
                 Cancel
               </button>
             </form>
             <p>
-              Don't have a user account? Click here to{" "}
-              <a href="sign-up.html">sign up</a>!
+              Don't have a user account? Click here to{' '}
+              <Link to='/signup'>sign up</Link>!
             </p>
           </div>
         </main>
       </>
-       )
+      )
    }
-}
+
+
 export default UserSignIn;
 

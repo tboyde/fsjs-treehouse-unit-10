@@ -10,16 +10,16 @@ import Error from './components/Error';
 import Forbidden from './components/Forbidden';
 
 export const routes = [
-    { path: '/', element: () => <Courses /> }, 
-    { path: '/course/create', element: () => <CreateCourse /> }, 
-    { path: '/courses/:id/update', element: () => <UpdateCourse /> }, 
-    { path: '/courses/:id', element: () => <CourseDetail /> }, 
-    { path: '/signin', element: () => <UserSignIn /> }, 
-    { path: '/signup', element: () => <UserSignUp /> }, 
-    { path: '/signout', element: () => <UserSignOut /> }, 
-    { path: '/error', element: () => <Error /> }, 
-    { path: '/forbidden', element: () => <Forbidden /> }, 
-    { path: '*', element: () => <NotFound /> }
+    { path: '/', component: () => <Courses /> }, 
+    { path: '/course/create', component: () => <CreateCourse /> }, 
+    { path: '/courses/:id/update', component: () => <UpdateCourse /> }, 
+    { path: '/courses/:id', component: () => <CourseDetail /> }, 
+    { path: '/signin', component: () => <UserSignIn /> }, 
+    { path: '/signup', component: () => <UserSignUp /> }, 
+    { path: '/signout', component: () => <UserSignOut /> }, 
+    { path: '/error', component: () => <Error /> }, 
+    { path: '/forbidden', component: () => <Forbidden /> }, 
+    { path: '*', component: () => <NotFound /> }
 ]
 
 

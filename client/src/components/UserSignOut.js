@@ -1,11 +1,13 @@
-import React from 'react';
-import { Navigate }  from 'react-router-dom';
+import { useEffect} from 'react';
+import { useNavigate }  from 'react-router-dom';
 
-function UserSignOut(){
+function UserSignOut({ context  }){
+  const redirectTo = useNavigate(); 
 
-  return (
-    <Navigate to="/" />
-  );
+  useEffect(() => {
+    context.actions.signOut(); 
+    return redirectTo('/'); 
+  }); 
 }
 
 export default UserSignOut; 

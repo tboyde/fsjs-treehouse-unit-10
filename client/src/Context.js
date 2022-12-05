@@ -31,7 +31,6 @@ export class Provider extends Component {
         signOut: this.signOut 
       }
     };
-
     return <Context.Provider value={value}> {this.props.children} </Context.Provider>;  
   }
 
@@ -39,11 +38,11 @@ export class Provider extends Component {
     const user = await this.data.getUser(emailAddress, password); 
     if (user !== null){
       this.setState(() =>({authenticatedUser: user }));
-      const cookiesOpts = { 
-        expires: 1  //user will remain authenticated for one day 
-      }
-          //Sets cookie with authenticated user
-      Cookies.set('authenticatedUser', JSON.stringify(user), {cookiesOpts})
+          //Sets cookie with authenticated user's info
+      Cookies.set('authenticatedUser', 
+      JSON.stringify(user), 
+      {expires: 1} //user's authentication will expire in one day
+      )
 
     }
     return user; 
@@ -70,5 +69,3 @@ export function withContext(Component) {
     );
   }
 }
-
-export default {withContext, Context}
