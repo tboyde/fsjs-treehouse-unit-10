@@ -1,8 +1,8 @@
-import config from './config';
+import apiBaseUrl from './config';
 
 export default class Data {
   api ( path, method = 'GET', body = null, requiresAuth = false, credentials = null ) {
-    const url = config.apiBaseUrl + path;
+    const url = apiBaseUrl + path;
 
     const options = {
       method,
@@ -48,7 +48,7 @@ export default class Data {
 
   //Creates a new user (POST)
   async createUser(user) {
-    const newUser = await this.api("/users", 'POST', user);
+    const newUser = await this.api('/users', 'POST', user);
     if (newUser.status === 201) {
       return [];
     } else if (newUser.status === 400) {

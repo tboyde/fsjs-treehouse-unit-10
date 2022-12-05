@@ -7,7 +7,7 @@ const CourseDetail = ({ context }) => {
     const currentUser  = context.authenticatedUser; 
     const redirectTo = useNavigate(); 
     const { id } = useParams(); 
-    const [ course, findCourse ] = useState()
+    const [ course, findCourse ] = useState(); 
 
     useEffect(()=>{
         context.data

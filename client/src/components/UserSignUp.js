@@ -12,43 +12,43 @@ const UserSignUp = ({ context }) => {
   const emailAddress = useRef(); 
   const password = useRef();
   
-  const submitHandler = async (e) =>{
+  const submitHandler = (e) =>{
     e.preventDefault(); 
 
     //creates user object from input from the user 
-    const user ={
-      'firstName': firstName.current.value, 
-      'lastName': lastName.current.value, 
-      'emailAddress': emailAddress.current.value, 
-      'password': password.current.value
+    const user = {
+      firstName: firstName.current.value, 
+      lastName: lastName.current.value, 
+      emailAddress: emailAddress.current.value, 
+      password: password.current.value
     }
 
-    await context.data
-    .createUser(user)
-    .then((errors) => {
-      if (errors){
-        setErrors(errors); 
-      } else {
-        context.actions
-        .signIn(user.emailAddress, user.password)
-        .then(user => {
-          if (user){
-            redirectTo('/')
-          } else {
-            setErrors(['Login Unsuccessful. Please Try Again'])
-          }
-        })
-        .catch(err =>{
-          console.log('Sign In Error: ', err); 
-          redirectTo('/error'); 
-        })
-      }
-    })
-    .catch(err =>{
-      console.log('Error creating new user', err); 
-      redirectTo('/error'); 
-    })
-  }; 
+    context.data
+      .createUser(user)
+      .then((errors) => {
+        if (errors){
+          setErrors(errors); 
+        } else {
+          context.actions
+          .signIn(user.emailAddress, user.password)
+          .then(user => {
+            if (user){
+              redirectTo('/')
+            } else {
+              setErrors(['Login Unsuccessful. Please Try Again'])
+            }
+          })
+          .catch(err =>{
+            console.log('Sign In Error: ', err); 
+            redirectTo('/error'); 
+          })
+        }
+      })
+      .catch(err =>{
+        console.log('Error creating new user', err); 
+        redirectTo('/error'); 
+      })
+    }; 
 
   const cancelHandler = (e) => {
     e.preventDefault(); 

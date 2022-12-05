@@ -14,7 +14,7 @@ const CreateCourse = ({ context }) => {
 
     const redirectTo = useNavigate()
 
-    const submitHandler = async (e) => {
+    const submitHandler = (e) => {
         //prevents button from automatically submitting
         e.preventDefault(); 
         //all of the fields that will be used for the 'body' when creating the course
@@ -26,7 +26,7 @@ const CreateCourse = ({ context }) => {
             materialsNeeded: materialsNeeded.current.value, 
         }; 
 
-        await context.data
+        context.data
         .CreateCourse(course, currentUser.emailAddress, currentUser.password)
         .then((errors) => (errors ? setValErrs(errors) : redirectTo('/')))//if there are no errors, the user will be redirected to courses / index page
         .catch((err) => {

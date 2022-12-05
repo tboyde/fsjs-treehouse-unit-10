@@ -84,7 +84,7 @@ const UpdateCourse = ({ context }) => {
                         type='text'
                         ref={title}
                     />
-                    <p>By Joe Smith</p>
+                    <p>{`By: ${currentUser.firstName} ${currentUser.lastName}`}</p>
                     <label htmlFor='courseDescription'>Course Description</label>
                     <textarea
                         id='courseDescription'

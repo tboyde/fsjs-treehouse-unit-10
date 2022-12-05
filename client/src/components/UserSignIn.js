@@ -10,9 +10,8 @@ const UserSignIn = ({ context }) => {
   const redirectTo = useNavigate(); 
   const location = useLocation(); 
 
-  const submitHandler = async (e) => {
+  const submitHandler =  (e) => {
     e.preventDefault();
-
     //retrieves signin credentials from user input 
     const email = emailAddress.current.value; 
     const pass = password.current.value; 
@@ -21,17 +20,17 @@ const UserSignIn = ({ context }) => {
 
     if (email && pass){
     //sign in method checks to see if user is authorized
-    await context.actions
-    .signIn(email, pass)
-    .then(currentUser => (currentUser ? redirectTo(lastLocation) : setValErrors(['Incorrect Email Address or Password. Please Try Again'])))
-    .catch(err => {
-      console.log('Sign In Error: ', err)
-      redirectTo('/error'); 
-    }); 
-    } else {
-      setValErrors(['Email Address and Password is Required']) 
+     context.actions
+      .signIn(email, pass)
+      .then(currentUser => (currentUser ? redirectTo(lastLocation) : setValErrors(['Incorrect Email Address or Password. Please Try Again'])))
+      .catch(err => {
+        console.log('Sign In Error: ', err)
+        redirectTo('/error'); 
+      }); 
+      } else {
+        setValErrors(['Email Address and Password is Required']) 
+      }
     }
-  }
 
   const cancelHandler = (e) => {
     e.preventDefault(); 
