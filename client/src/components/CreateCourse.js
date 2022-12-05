@@ -27,7 +27,7 @@ const CreateCourse = ({ context }) => {
         }; 
 
         context.data
-        .CreateCourse(course, currentUser.emailAddress, currentUser.password)
+        .createCourse(course, currentUser.emailAddress, currentUser.password)
         .then((errors) => (errors ? setValErrs(errors) : redirectTo('/')))//if there are no errors, the user will be redirected to courses / index page
         .catch((err) => {
             console.log('Error related to course creation', err)
