@@ -26,7 +26,7 @@ const UserSignUp = ({ context }) => {
     context.data
       .createUser(user)
       .then((errors) => {
-        if (errors){
+        if (errors.length){
           setErrors(errors); 
         } else {
           context.actions
