@@ -49,14 +49,22 @@ const UpdateCourse = ({ context }) => {
         //here, the update course method is applied and 
         context.data
         .updateCourse(id, course, currentUser)
-        //if errors are present, then the errors will be added to the validated errors array. Otherwise, users will be redirected back to the index page
-        .then(errors => {
-            if (errors.length !== 0 ){
-                setValErrs(errors)
-            } else {
-                redirectTo('/')
-            }
-        })
+        //if errors are present, then the errors will be added to the validation errors array. Otherwise, users will be redirected back to the index page
+        .then(errors => ( //validation errors
+            errors.length !== 0 ?  
+            setValErrs( //sets validation errors with errors that are returned
+                <>
+                <div className='validation--errors'>
+                    <h3>Validation Errors--*/</h3>
+                    <ul>
+                        {errors.map((error, index) =>(
+                            <li key={index}>{error}</li>
+                        ))}
+                    </ul>
+                </div>   
+                </>
+            ) : redirectTo('/') //if there are no issues with the response, the user will be redirected to courses / index page
+        ))
         .catch((err) => {
             console.log(err); 
             redirectTo('/error')
@@ -75,14 +83,7 @@ const UpdateCourse = ({ context }) => {
             <div className='wrap'>
                 <h2>Update Course</h2>
                 <form onSubmit={submitHandler}>
-                { valErrs.length !==0 ? ( //if validation errors exist, the validtion field will apper 
-                    <div className='validation--errors'>
-                        <h3>Validation Errors</h3>
-                        <ul>
-                            {valErrs.map((error, index) => <li key={index}>{error}</li>)}
-                        </ul>
-                    </div> 
-                    ): null }
+                {valErrs}
                 <div className='main--flex'>
                     <div>
                     <label htmlFor='courseTitle'>Course Title</label>

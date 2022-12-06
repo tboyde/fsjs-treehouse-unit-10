@@ -27,13 +27,21 @@ const CreateCourse = ({ context }) => {
 
         context.data
             .createCourse(course, currentUser)
-            .then(errors => {
-                if (errors.length){
-                    setValErrs(errors)
-                } else {
-                    redirectTo('/') //if there are no errors, the user will be redirected to courses / index page
-                }
-            })
+            .then(errors => ( //validation errors
+                errors.length !== 0 ?  
+                setValErrs( //sets validation errors with errors thatt are returned
+                    <>
+                    <div className='validation--errors'>
+                        <h3>Validation Errors--*/</h3>
+                        <ul>
+                            {errors.map((error, index) =>(
+                                <li key={index}>{error}</li>
+                            ))}
+                        </ul>
+                    </div>   
+                    </>
+                ) : redirectTo('/') //if there are no issues with the response, the user will be redirected to courses / index page
+            ))
             .catch((err) => {
                 console.log('Error related to course creation', err)
                 redirectTo('/error'); 
@@ -51,18 +59,7 @@ const CreateCourse = ({ context }) => {
             <main>
                 <div className='wrap'>
                     <h2>Create Course</h2>
-                    {valErrs && valErrs.length >= 1 ? (
-                        <div className='validation--errors'>
-                            <h3>Validation Errors--*/</h3>
-                            <ul>
-                                {valErrs.map((error, index) =>(
-                                    <li key={index}>{error}</li>
-                                ))}
-                            </ul>
-                        </div>
-                    ) : null }
-
-                    
+                    {valErrs}
                     <form onSubmit={submitHandler}>
                         <div className='main--flex'>
                             <div>
