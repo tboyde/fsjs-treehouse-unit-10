@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 const UpdateCourse = ({ context }) => {
     //setting initial state for validation errors 
-    const [valErrs, setValErrs ] = useState([]); 
+    const [ valErrors, setValErrors ] = useState([]); 
 
     const currentUser = context.authenticatedUser; 
     const redirectTo = useNavigate(); 
@@ -50,21 +50,7 @@ const UpdateCourse = ({ context }) => {
         context.data
         .updateCourse(id, course, currentUser)
         //if errors are present, then the errors will be added to the validation errors array. Otherwise, users will be redirected back to the index page
-        .then(errors => ( //validation errors
-            errors.length !== 0 ?  
-            setValErrs( //sets validation errors with errors that are returned
-                <>
-                <div className='validation--errors'>
-                    <h3>Validation Errors--*/</h3>
-                    <ul>
-                        {errors.map((error, index) =>(
-                            <li key={index}>{error}</li>
-                        ))}
-                    </ul>
-                </div>   
-                </>
-            ) : redirectTo('/') //if there are no issues with the response, the user will be redirected to courses / index page
-        ))
+        .then(errors =>(errors.length ? setValErrors(errors) : redirectTo(`/courses/${id}`))) // if validation errors are present, then user's request will process & redirect to course detail page 
         .catch((err) => {
             console.log(err); 
             redirectTo('/error')
@@ -76,57 +62,64 @@ const UpdateCourse = ({ context }) => {
         e.preventDefault(); 
         redirectTo(`/courses/${id}`); 
     }
-
+    
        return (
         <>
         <main>
             <div className='wrap'>
                 <h2>Update Course</h2>
+                {valErrors ? (
+                        <div className="validation--errors">
+                            <h3>Validation Errors</h3>
+                            <ul>
+                                {valErrors.map((error, index) => <li key={index}>{error}</li>)}
+                            </ul>
+                        </div>
+                    ): null }
                 <form onSubmit={submitHandler}>
-                {valErrs}
-                <div className='main--flex'>
-                    <div>
-                    <label htmlFor='courseTitle'>Course Title</label>
-                    <input
-                        id='courseTitle'
-                        name='courseTitle'
-                        type='text'
-                        ref={title}
-                    />
-                    <p>{`By: ${currentUser.firstName} ${currentUser.lastName}`}</p>
-                    <label htmlFor='courseDescription'>Course Description</label>
-                    <textarea
-                        id='courseDescription'
-                        name='courseDescription'
-                        ref={description}
-                       
-                    />
+                    <div className='main--flex'>
+                        <div>
+                        <label htmlFor='courseTitle'>Course Title</label>
+                        <input
+                            id='courseTitle'
+                            name='courseTitle'
+                            type='text'
+                            ref={title}
+                        />
+                        <p>{`By: ${currentUser.firstName} ${currentUser.lastName}`}</p>
+                        <label htmlFor='courseDescription'>Course Description</label>
+                        <textarea
+                            id='courseDescription'
+                            name='courseDescription'
+                            ref={description}
+                        
+                        />
+                        </div>
+                        <div>
+                        <label htmlFor='estimatedTime'>Estimated Time</label>
+                        <input
+                            id='estimatedTime'
+                            name='estimatedTime'
+                            type='text'
+                            ref={estimatedTime}
+                        />
+                        <label htmlFor='materialsNeeded'>Materials Needed</label>
+                        <textarea
+                            id='materialsNeeded'
+                            name='materialsNeeded'
+                        ref={materialsNeeded}
+                        />
+                        </div>
                     </div>
-                    <div>
-                    <label htmlFor='estimatedTime'>Estimated Time</label>
-                    <input
-                        id='estimatedTime'
-                        name='estimatedTime'
-                        type='text'
-                        ref={estimatedTime}
-                    />
-                    <label htmlFor='materialsNeeded'>Materials Needed</label>
-                    <textarea
-                        id='materialsNeeded'
-                        name='materialsNeeded'
-                       ref={materialsNeeded}
-                    />
-                    </div>
-                </div>
-                <button className='button' type='submit'>
-                    Update Course
-                </button>
-                <button
-                    className='button button-secondary'
-                    onClick={cancelHandler}
-                >
-                    Cancel
-                </button>
+                    <button className='button' type='submit'>
+                        Update Course
+                    </button>
+                    <button
+                        className='button button-secondary'
+                        onClick={cancelHandler}
+                    >
+                        Cancel
+                    </button>
                 </form>
             </div>
         </main>

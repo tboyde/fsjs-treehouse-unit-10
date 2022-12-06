@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 const CreateCourse = ({ context }) => {
     //sets initial value & state for validation erros
-    const [valErrs, setValErrs ] = useState([]); 
+    const [valErrors, setValErrors ] = useState([]); 
     const currentUser = context.authenticatedUser; 
 
     //sets references that are required to build the course object 
@@ -27,21 +27,8 @@ const CreateCourse = ({ context }) => {
 
         context.data
             .createCourse(course, currentUser)
-            .then(errors => ( //validation errors
-                errors.length !== 0 ?  
-                setValErrs( //sets validation errors with errors thatt are returned
-                    <>
-                    <div className='validation--errors'>
-                        <h3>Validation Errors--*/</h3>
-                        <ul>
-                            {errors.map((error, index) =>(
-                                <li key={index}>{error}</li>
-                            ))}
-                        </ul>
-                    </div>   
-                    </>
-                ) : redirectTo('/') //if there are no issues with the response, the user will be redirected to courses / index page
-            ))
+             //errors references validation errors returned in the response
+            .then(errors =>(errors.length ? setValErrors(errors) : redirectTo('/'))) 
             .catch((err) => {
                 console.log('Error related to course creation', err)
                 redirectTo('/error'); 
@@ -59,7 +46,14 @@ const CreateCourse = ({ context }) => {
             <main>
                 <div className='wrap'>
                     <h2>Create Course</h2>
-                    {valErrs}
+                    {valErrors ? (
+                        <div className="validation--errors">
+                            <h3>Validation Errors</h3>
+                            <ul>
+                                {valErrors.map((error, index) => <li key={index}>{error}</li>)}
+                            </ul>
+                        </div>
+                    ): null }
                     <form onSubmit={submitHandler}>
                         <div className='main--flex'>
                             <div>
