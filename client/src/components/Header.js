@@ -16,7 +16,7 @@ const Header = ({context} ) => {
                     { authUser ? ( //if user is authorized, then a header with a signout option will appear
                         <>
                         <ul className="header--signedin">
-                            <li>{`Welcome, ${authUser.firstName}!`}</li>
+                            <li>{`Welcome, ${authUser.firstName} ${authUser.lastName}!`}</li>
                             <li>
                                 <NavLink className='signout' to='/signout' onClick={()=> context.actions.signOut()}>Sign Out</NavLink>
                             </li>
