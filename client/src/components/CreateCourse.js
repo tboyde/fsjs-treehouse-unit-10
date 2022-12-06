@@ -6,11 +6,12 @@ const CreateCourse = ({ context }) => {
     const [valErrors, setValErrors ] = useState([]); 
     const currentUser = context.authenticatedUser; 
 
-    //sets references that are required to build the course object 
-    const description = useRef(); 
+    //sets references & states for the objects that are required to build the course object 
+    const [titleSet, setTitle] = useState('')
+    const [descriptionSet, setDescription ] = useState(''); 
+
     const estimatedTime = useRef(); 
     const materialsNeeded = useRef(); 
-    const title = useRef(); 
 
     const redirectTo = useNavigate()
 
@@ -19,8 +20,8 @@ const CreateCourse = ({ context }) => {
         e.preventDefault(); 
         //all of the fields that will be used for the 'body' when creating the course
         const course = {
-            title: title.current.value, 
-            description: description.current.value,
+            title: titleSet, 
+            description: descriptionSet,
             estimatedTime: estimatedTime.current.value, 
             materialsNeeded: materialsNeeded.current.value, 
         }; 
@@ -46,7 +47,7 @@ const CreateCourse = ({ context }) => {
             <main>
                 <div className='wrap'>
                     <h2>Create Course</h2>
-                    {valErrors ? (
+                    {valErrors.length !== 0 ? (
                         <div className="validation--errors">
                             <h3>Validation Errors</h3>
                             <ul>
@@ -63,7 +64,7 @@ const CreateCourse = ({ context }) => {
                                 name='courseTitle'
                                 type='text'
                                 defaultValue=''
-                                ref={title}
+                                onChange={(e) =>{setTitle(e.target.value)}}
                             />
                             <p>{`By: ${currentUser.firstName} ${currentUser.lastName}`}</p>
                             <label htmlFor='courseDescription'>Course Description</label>
@@ -71,7 +72,7 @@ const CreateCourse = ({ context }) => {
                                 id='courseDescription'
                                 name='courseDescription'
                                 defaultValue=''
-                                ref={description}
+                                onChange={(e) =>{setDescription(e.target.value)}}
 
                             />
                             </div>

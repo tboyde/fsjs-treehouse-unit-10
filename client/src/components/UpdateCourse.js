@@ -16,6 +16,10 @@ const UpdateCourse = ({ context }) => {
     const materialsNeeded = useRef(); 
     const title = useRef(); 
 
+    //refrences state of required fields (for validation also) for update course form
+    // const [titleSet, setTitle] = useState('')
+    // const [descriptionSet, setDescription ] = useState(''); 
+
     useEffect(()=>{
         context.data
         .getCourse(id)
@@ -37,11 +41,10 @@ const UpdateCourse = ({ context }) => {
 
     const submitHandler = (e) => {
         e.preventDefault(); 
-
         //builds the course object that will be passed into the updateCourse method
         const course = {
             title: title.current.value, 
-            description: description.current.value, 
+            description: description.current.value,  
             estimatedTime: estimatedTime.current.value, 
             materialsNeeded: materialsNeeded.current.value,
         }
@@ -68,7 +71,7 @@ const UpdateCourse = ({ context }) => {
         <main>
             <div className='wrap'>
                 <h2>Update Course</h2>
-                {valErrors ? (
+                {valErrors.length !== 0 ? (
                         <div className="validation--errors">
                             <h3>Validation Errors</h3>
                             <ul>
@@ -85,6 +88,7 @@ const UpdateCourse = ({ context }) => {
                             name='courseTitle'
                             type='text'
                             ref={title}
+                            // onChange={(e) =>{setTitle(e.target.value)}}
                         />
                         <p>{`By: ${currentUser.firstName} ${currentUser.lastName}`}</p>
                         <label htmlFor='courseDescription'>Course Description</label>
@@ -92,6 +96,7 @@ const UpdateCourse = ({ context }) => {
                             id='courseDescription'
                             name='courseDescription'
                             ref={description}
+                            // onChange={(e) =>{setDescription(e.target.value)}}
                         
                         />
                         </div>

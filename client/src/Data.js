@@ -66,7 +66,9 @@ export default class Data {
     if (res.status === 201) {
       return [];
     } else if (res.status === 400) {
-      return res.json().then(errors => errors);
+      return res.json().then(data => {
+        return data.errors
+      });
     } else {
       throw new Error('Error: There was an issue processing this request with the server');
     }
@@ -88,7 +90,9 @@ async updateCourse(id, course, currentUser) {
   if (res.status === 204) {
     return [];
   } else if (res.status === 400) {
-    return res.json().then(errors => errors);
+    return res.json().then(data => {
+      return data.errors
+    });
   } else if (res.status === 404) {
     throw new Error("404");
   } else {

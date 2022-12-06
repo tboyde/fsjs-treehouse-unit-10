@@ -22,7 +22,7 @@ const Header = ({context} ) => {
                             </li>
                         </ul>
                         </>
-                    ) : (
+                    ) : ( //otherwise, the signed out header will appear
                         <>
                         <ul className="header--signedout">
                             <li>
