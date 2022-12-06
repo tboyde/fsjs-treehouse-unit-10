@@ -7,7 +7,7 @@ import UserSignIn from './components/UserSignIn';
 import UserSignUp from './components/UserSignUp';
 import UserSignOut from './components/UserSignOut';
 import NotFound from './components/NotFound';
-import Error from './components/Error';
+import Error from './components/UnhandledError'
 import Forbidden from './components/Forbidden';
 
 //Adding context to components that require it for functionality 

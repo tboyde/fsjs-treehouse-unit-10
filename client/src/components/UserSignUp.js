@@ -17,25 +17,29 @@ const UserSignUp = ({ context }) => {
 
     //creates user object from input from the user 
     const user = {
-      "firstName": firstName.current.value, 
-      "lastName": lastName.current.value, 
-      "emailAddress": emailAddress.current.value, 
-      "password": password.current.value, 
+      'firstName': firstName.current.value, 
+      'lastName': lastName.current.value, 
+      'emailAddress': emailAddress.current.value, 
+      'password': password.current.value, 
     }
+
+    //retrieves signin credentials from user input 
+    const email = emailAddress.current.value; 
+    const pass = password.current.value;
 
     context.data
       .createUser(user)
-      .then((errors) => {
+      .then(errors => {
         if (errors.length){
-          setErrors(errors); 
+          setErrors(errors)
         } else {
           context.actions
-          .signIn(emailAddress.current.value, password.current.value )
-          .then(() => redirectTo('/'))
-          .catch(err =>{
-            console.log('Sign In Error: ', err); 
-            redirectTo('/error'); 
-          })
+            .signIn(email, pass)
+            .then( successSignIn => (successSignIn ? redirectTo('/'): setErrors(['Unsuccessfully Sign In'])))
+            .catch(err => {
+              console.log('Error Signing In: ', err); 
+              redirectTo('/error')
+            })
         }
       })
       .catch(err =>{
@@ -51,10 +55,10 @@ const UserSignUp = ({ context }) => {
        return (
         <>
         <main>
-          <div className="form--centered">
+          <div className='form--centered'>
             <h2>Sign Up</h2>
             {valErrors ? (
-              <div className="validation--errors">
+              <div className='validation--errors'>
                         <h3>Validation Errors</h3>
                         <ul>
                             {valErrors.map((error, index) => <li key={index}>{error}</li>)}
@@ -63,33 +67,33 @@ const UserSignUp = ({ context }) => {
               ): null }
 
             <form onSubmit={submitHandler}>
-              <label htmlFor="firstName">First Name</label>
-              <input id="firstName" name="firstName" type="text" defaultValue="" ref={firstName} />
-              <label htmlFor="lastName">Last Name</label>
-              <input id="lastName" name="lastName" type="text" defaultValue="" ref={lastName} />
-              <label htmlFor="emailAddress">Email Address</label>
+              <label htmlFor='firstName'>First Name</label>
+              <input id='firstName' name='firstName' type='text' defaultValue='' ref={firstName} />
+              <label htmlFor='lastName'>Last Name</label>
+              <input id='lastName' name='lastName' type='text' defaultValue='' ref={lastName} />
+              <label htmlFor='emailAddress'>Email Address</label>
               <input
-                id="emailAddress"
-                name="emailAddress"
-                type="email"
-                defaultValue=""
+                id='emailAddress'
+                name='emailAddress'
+                type='email'
+                defaultValue=''
                 ref={emailAddress}
               />
-              <label htmlFor="password">Password</label>
-              <input id="password" name="password" type="password" defaultValue="" ref={password} />
-              <button className="button" type="submit">
+              <label htmlFor='password'>Password</label>
+              <input id='password' name='password' type='password' defaultValue='' ref={password} />
+              <button className='button' type='submit'>
                 Sign Up
               </button>
               <button
-                className="button button-secondary"
+                className='button button-secondary'
                 onClick={cancelHandler}
               >
                 Cancel
               </button>
             </form>
             <p>
-              Already have a user account? Click here to{" "}
-              <Link to="/signup">sign in</Link>!
+              Already have a user account? Click here to{' '}
+              <Link to='/signup'>sign in</Link>!
             </p>
           </div>
         </main>

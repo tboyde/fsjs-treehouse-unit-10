@@ -54,7 +54,9 @@ export default class Data {
       return [];
     } else if (res.status === 400) {
       //will return validation errors 
-      return res.json().then(errors => errors); 
+      return res.json().then(data => {
+        return data.errors
+      });
     } else {
       throw new Error('Error: There was an issue processing this request with the server');
     }
