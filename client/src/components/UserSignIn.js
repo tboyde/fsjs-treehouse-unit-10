@@ -4,9 +4,11 @@ import { useNavigate, useLocation, Link } from 'react-router-dom';
 const UserSignIn = ({ context }) => {
   const [ valError, setValErrors ] = useState(); 
 
+  //references the email address and password field 
   const emailAddress = useRef();
   const password = useRef(); 
 
+  //methods that enable user to be redirected & obtain their last visited location
   const redirectTo = useNavigate(); 
   const location = useLocation(); 
 
@@ -33,6 +35,7 @@ const UserSignIn = ({ context }) => {
       }
     }
 
+  //Closes user from sign in and redirects back to home page
   const cancelHandler = (e) => {
     e.preventDefault(); 
     redirectTo('/')

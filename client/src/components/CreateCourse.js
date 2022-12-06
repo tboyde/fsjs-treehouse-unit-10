@@ -19,7 +19,6 @@ const CreateCourse = ({ context }) => {
         e.preventDefault(); 
         //all of the fields that will be used for the 'body' when creating the course
         const course = {
-            userId: context.authenticatedUser.id, 
             title: title.current.value, 
             description: description.current.value,
             estimatedTime: estimatedTime.current.value, 
@@ -27,14 +26,21 @@ const CreateCourse = ({ context }) => {
         }; 
 
         context.data
-        .createCourse(course, currentUser.emailAddress, currentUser.password)
-        .then((errors) => (errors ? setValErrs(errors) : redirectTo('/')))//if there are no errors, the user will be redirected to courses / index page
-        .catch((err) => {
-            console.log('Error related to course creation', err)
-            redirectTo('/error'); 
-        }); 
+            .createCourse(course, currentUser)
+            .then(errors => {
+                if (errors.length){
+                    setValErrs(errors)
+                } else {
+                    redirectTo('/') //if there are no errors, the user will be redirected to courses / index page
+                }
+            })
+            .catch((err) => {
+                console.log('Error related to course creation', err)
+                redirectTo('/error'); 
+            }); 
     }; 
 
+    //When pressed this redirects user back to index
     const cancelHandler = (e) => {
         e.preventDefault(); 
         redirectTo('/')

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-
 const Courses = ({ context }) => {
+    //sets the state of the 'courses' pull from the REST API and provides name to 'useNavigate()' method. 
     const [ courses, setCourses ] = useState([]); 
     const redirectTo = useNavigate(); 
 
@@ -41,10 +41,10 @@ const Courses = ({ context }) => {
                     <polygon points="7,6 7,0 6,0 6,6 0,6 0,7 6,7 6,13 7,13 7,7 13,7 13,6 " />
                 </svg>
           New Course
-         </span>
-        </Link>
-    </div>
-  </main>
+                </span>
+                </Link>
+            </div>
+        </main>
 </>
 
        )

@@ -83,12 +83,12 @@ router.put('/courses/:id', authenticateUser, async(req, res) => {
   try {
     const user = req.currentUser; 
     const course = await Course.findByPk(req.params.id); 
-    if (course.userId === user.id){
+    if (course?.userId === user.id){
       await course.update(req.body)
       res.status(204).end()
     } else {
       res.status(403)
-        .json({message: `Access Denied: ${course.title} can only be updated by the course owner.`})
+        .json({message: `Access Denied: ${course?.title} can only be updated by the course owner.`})
         .end(); 
     }
   } catch(error){

@@ -1,5 +1,6 @@
 import apiBaseUrl from './config';
 
+//this document contains the methods used to make GET, POST, PUT, And DELETE requests to the REST API
 export default class Data {
   api ( path, method = 'GET', body = null, requiresAuth = false, credentials = null ) {
     const url = apiBaseUrl + path;
@@ -11,13 +12,13 @@ export default class Data {
       },
     };
 
-    if (body !== null) {
+    if (body) {
       options.body = JSON.stringify(body);
     }
     
     //if authorization is true, then user credentials will be encoded and that info will be added to the options header
     if (requiresAuth) {    
-      const encodedCredentials = btoa(`${credentials.username}:${credentials.password}`);
+      const encodedCredentials = btoa(`${credentials.emailAddress}:${credentials.password}`);
       options.headers['Authorization'] = `Basic ${encodedCredentials}`;
     }
     return fetch(url, options);
@@ -35,14 +36,14 @@ export default class Data {
   }
 
   //Retrieves user (GET)
-  async getUser(username, password) {
-    const res = await this.api(`/users`, 'GET', null, true, { username, password } );
+  async getUser(emailAddress, password) {
+    const res = await this.api(`/users`, 'GET', null, true, { emailAddress, password } );
     if (res.status === 200) {
-      return res.json().then((data) => data);
+      return res.json().then(data => data);
     } else if (res.status === 401) {
       return null;
     } else {
-      throw new Error();
+      throw new Error('Error: There was an issue processing this request with the server');
     }
   }
 
@@ -52,25 +53,22 @@ export default class Data {
     if (res.status === 201) {
       return [];
     } else if (res.status === 400) {
-      return res.json().then((data) => {
-        return data.errors;
-      });
+      //will return validation errors 
+      return res.json().then(errors => errors); 
     } else {
-      throw new Error();
+      throw new Error('Error: There was an issue processing this request with the server');
     }
   }
 
   //Creates a new course (POST)
-  async createCourse(body, username, password) {
-    const res = await this.api(`/courses`, 'POST', body, true, { username, password });
+  async createCourse(body, currentUser) {
+    const res = await this.api(`/courses`, 'POST', body, true, currentUser);
     if (res.status === 201) {
       return [];
     } else if (res.status === 400) {
-      return res.json().then((data) => {
-        return data.errors;
-      });
+      return res.json().then(errors => errors);
     } else {
-      throw new Error();
+      throw new Error('Error: There was an issue processing this request with the server');
     }
   }
 
@@ -78,21 +76,19 @@ export default class Data {
   async getCourse(id) {
     const res = await this.api(`/courses/${id}`, 'GET');
     if (res.status === 200) {
-      return res.json().then((data) => data);
+      return res.json().then(course => course);
     } else {
-      throw new Error();
+      throw new Error('Error: There was an issue processing this request with the server');
     }
   }
 
 //Updates existing course (PUT)
-async updateCourse(id, body, username, password) {
-  const res = await this.api(`/courses/${id}`, 'PUT', body, true, { username, password });
+async updateCourse(id, course, currentUser) {
+  const res = await this.api(`/courses/${id}`, 'PUT', course, true, currentUser);
   if (res.status === 204) {
     return [];
   } else if (res.status === 400) {
-    return res.json().then((data) => {
-      return data.errors;
-    });
+    return res.json().then(errors => errors);
   } else if (res.status === 404) {
     throw new Error("404");
   } else {
@@ -101,8 +97,8 @@ async updateCourse(id, body, username, password) {
 ;}
 
 //Deletes course (DELETE)
-async deleteCourse(id, username, password) {
-  const res = await this.api(`/courses/${id}`, 'DELETE', null, true, { username, password });
+async deleteCourse(id, currentUser) {
+  const res = await this.api(`/courses/${id}`, 'DELETE', null, true, currentUser);
   if (res.status === 204) {
     return [];
   } else if (res.status === 401) {

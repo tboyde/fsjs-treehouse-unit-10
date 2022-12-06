@@ -1,6 +1,7 @@
 import React from 'react';
 
 const Error = () => {
+    //Default page content when there is a server error
     return(
         <>
         <main>

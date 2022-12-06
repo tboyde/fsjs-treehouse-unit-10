@@ -23,7 +23,7 @@ const UpdateCourse = ({ context }) => {
             if (!course){
                 redirectTo('/notfound'); 
             } else {
-                if (course.courseOwner.id !== currentUser.id){
+                if (course.courseOwner.id !== currentUser?.id){
                     redirectTo('/forbidden')
                 } else {
                 //sets default value once update form is opened
@@ -35,9 +35,10 @@ const UpdateCourse = ({ context }) => {
         }); 
     }); 
 
-    const submitHandler = async (e) => {
+    const submitHandler = (e) => {
         e.preventDefault(); 
 
+        //builds the course object that will be passed into the updateCourse method
         const course = {
             title: title.current.value, 
             description: description.current.value, 
@@ -45,19 +46,27 @@ const UpdateCourse = ({ context }) => {
             materialsNeeded: materialsNeeded.current.value,
         }
 
-        await context.data
-        .updateCourse(id, course, currentUser.emailAddress, currentUser.password)
+        //here, the update course method is applied and 
+        context.data
+        .updateCourse(id, course, currentUser)
         //if errors are present, then the errors will be added to the validated errors array. Otherwise, users will be redirected back to the index page
-        .then((errors) => (errors ? setValErrs(errors) : redirectTo('/')))
+        .then(errors => {
+            if (errors.length !== 0 ){
+                setValErrs(errors)
+            } else {
+                redirectTo('/')
+            }
+        })
         .catch((err) => {
             console.log(err); 
             redirectTo('/error')
         }); 
     }; 
 
+    //Closes user out of update screen and redirects them back to home page 
     const cancelHandler = (e) => {
         e.preventDefault(); 
-        redirectTo('/')
+        redirectTo(`/courses/${id}`); 
     }
 
        return (
@@ -66,15 +75,14 @@ const UpdateCourse = ({ context }) => {
             <div className='wrap'>
                 <h2>Update Course</h2>
                 <form onSubmit={submitHandler}>
-                { valErrs ? (
+                { valErrs.length !==0 ? ( //if validation errors exist, the validtion field will apper 
                     <div className='validation--errors'>
                         <h3>Validation Errors</h3>
                         <ul>
                             {valErrs.map((error, index) => <li key={index}>{error}</li>)}
                         </ul>
                     </div> 
-                    ) : null 
-                }
+                    ): null }
                 <div className='main--flex'>
                     <div>
                     <label htmlFor='courseTitle'>Course Title</label>
@@ -114,7 +122,7 @@ const UpdateCourse = ({ context }) => {
                 </button>
                 <button
                     className='button button-secondary'
-                    onclick={cancelHandler}
+                    onClick={cancelHandler}
                 >
                     Cancel
                 </button>

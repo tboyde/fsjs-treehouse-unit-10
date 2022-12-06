@@ -2,6 +2,7 @@ import React from "react";
 import { NavLink } from 'react-router-dom'; 
 
 const Header = ({context} ) => {   
+    //this is the value that is used later in the return statement to check to see if a user is authorized. If they are not, they will see a different header than a user that is authenticated & signed in. 
     const authUser = context.authenticatedUser; 
 
     return(

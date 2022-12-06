@@ -18,28 +18,27 @@ export class Provider extends Component {
   }
 
   render() {
-    const { authenticatedUser } = this.state; 
+    //passes multiple pieces of information to value object will be passed to provider
     const value = {
-      authenticatedUser, 
+      authenticatedUser: this.state.authenticatedUser, 
       data: this.data, 
       actions: { // Actions object stores the sign & sign out methods
         signIn: this.signIn, 
         signOut: this.signOut 
       }
     };
-    return <Context.Provider value={value}> {this.props.children} </Context.Provider>;  
+    return <Context.Provider value={value}>{this.props.children} </Context.Provider>;  
   }
 
   signIn = async ( emailAddress, password ) => {
     const user = await this.data.getUser(emailAddress, password); 
-    if (user !== null){
-      this.setState(() =>({authenticatedUser: user }));
+
+    if (user){
+      this.setState(() =>({authenticatedUser: {...user, password} }));
           //Sets cookie with authenticated user's info
-      Cookies.set('authenticatedUser', 
-      JSON.stringify(user), 
+      Cookies.set('authenticatedUser', JSON.stringify({...user, password}), 
       {expires: 1} //user's authentication will expire in one day
       )
-
     }
     return user; 
   }

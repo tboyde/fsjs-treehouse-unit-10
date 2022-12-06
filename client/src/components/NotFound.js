@@ -1,6 +1,7 @@
 import React from 'react';
 
 const NotFound = () => {
+    //Default page when user looks for a resource that does not exist
     return(
         <>
         <main>

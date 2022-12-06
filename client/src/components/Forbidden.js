@@ -1,6 +1,7 @@
 import React from 'react';
 
 const Forbidden = () => {
+    //This page appears when a user is trying to access a resource that is not allowed 
     return(
         <>
          <main>
